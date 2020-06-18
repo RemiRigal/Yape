@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+</head>
+<body>
+  <div class="text-center h1 m-4">
+    PyLoad Assistant Options
+  </div>
+  <div class="d-flex justify-content-center m-5">
+    <form>
+      <div class="form-group">
+        <label for="serverIp">PyLoad server's IP address</label>
+        <input type="text" class="form-control" id="serverIp">
+      </div>
+      <div class="form-group">
+        <label for="serverPort">PyLoad server's port</label>
+        <input type="number" class="form-control" id="serverPort">
+      </div>
+      <div class="form-group">
+        <label for="username">Username</label>
+        <input type="text" class="form-control" id="username">
+      </div>
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input type="password" class="form-control" id="password">
+      </div>
+    </form>
+  </div>
+  <div class="d-flex justify-content-center">
+    <div class="m-2">
+      <button id="save" class="btn btn-primary">Save</button>
+    </div>
+  </div>
+  <div class="d-flex justify-content-center">
+    <div id="saved" class="alert alert-success m-2" hidden>Saved</div>
+  </div>
+</body>
+
+<script type="text/javascript" src="js/jquery-3.5.1.min.js"></script>
+<script type="text/javascript" src="js/bootstrap.min.js"></script>
+<script src="options.js"></script>
+</html>

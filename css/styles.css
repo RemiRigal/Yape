@@ -1,0 +1,17 @@
+html {
+    min-width: 500px;
+    min-height: 160px;
+}
+
+body {
+    min-width: 500px;
+    min-height: 160px;
+    max-width: 500px;
+    padding: 12px 16px;
+}
+
+.ellipsis {
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}

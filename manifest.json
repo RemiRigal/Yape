@@ -1,0 +1,28 @@
+{
+  "name": "PyLoad Assistant",
+  "version": "0.0.1",
+  "description": "Extension for PyLoad to easily monitor and add downloads",
+  "permissions": ["activeTab", "declarativeContent", "storage"],
+  "optional_permissions": ["http://*/", "https://*/"],
+  "background": {
+    "scripts": ["background.js"],
+    "persistent": false
+  },
+  "page_action": {
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "images/icon.png",
+      "32": "images/icon.png",
+      "48": "images/icon.png",
+      "128": "images/icon.png"
+    }
+  },
+  "icons": {
+    "16": "images/icon.png",
+    "32": "images/icon.png",
+    "48": "images/icon.png",
+    "128": "images/icon.png"
+  },
+  "options_page": "options.html",
+  "manifest_version": 2
+}
