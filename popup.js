@@ -21,7 +21,7 @@ function login(username, password, callback) {
         return;
     }
     let xhr = new XMLHttpRequest();
-    xhr.open('POST', `http://${serverIp}:${serverPort}/api/login`, true);
+    xhr.open('POST', `https://${serverIp}/api/login`, true);
     xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
     xhr.onreadystatechange = function() {
         if (xhr.readyState === 4) {
@@ -37,7 +37,7 @@ function login(username, password, callback) {
 
 function checkURL(url, callback) {
     let xhr = new XMLHttpRequest();
-    xhr.open('POST', `http://${serverIp}:${serverPort}/api/checkURLs`, true);
+    xhr.open('POST', `https://${serverIp}/api/checkURLs`, true);
     xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
     xhr.onreadystatechange = function() {
         if (xhr.readyState === 4) {
@@ -50,7 +50,7 @@ function checkURL(url, callback) {
 
 function addPackage(name, url, callback) {
     let xhr = new XMLHttpRequest();
-    xhr.open('POST', `http://${serverIp}:${serverPort}/api/addPackage`, true);
+    xhr.open('POST', `https://${serverIp}/api/addPackage`, true);
     xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
     xhr.onreadystatechange = function() {
         if (xhr.readyState === 4) {
@@ -68,7 +68,7 @@ function addPackage(name, url, callback) {
 
 function getStatusDownloads(callback) {
     let xhr = new XMLHttpRequest();
-    xhr.open('POST', `http://${serverIp}:${serverPort}/api/statusDownloads`, true);
+    xhr.open('POST', `https://${serverIp}/api/statusDownloads`, true);
     xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
     xhr.onreadystatechange = function() {
         if (xhr.readyState === 4) {
@@ -81,7 +81,7 @@ function getStatusDownloads(callback) {
 
 function getQueueData(callback) {
     let xhr = new XMLHttpRequest();
-    xhr.open('POST', `http://${serverIp}:${serverPort}/api/getQueueData`, true);
+    xhr.open('POST', `https://${serverIp}/api/getQueueData`, true);
     xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
     xhr.onreadystatechange = function() {
         if (xhr.readyState === 4) {
@@ -172,43 +172,36 @@ optionsButton.onclick = function(event) {
 }
 
 
-chrome.storage.sync.get(['username', 'password'], function(data) {
+chrome.storage.sync.get(['username', 'password', 'loggedIn'], function(data) {
     const username = data.username;
     const password = data.password;
-    if (!username || !password) {
+    loggedIn = data.loggedIn;
+    if (!loggedIn) {
         setErrorMessage(`No credentials are specified, please set them in the extension's option page`);
         statusDiv.innerHTML = '';
         return;
     }
-    login(username, password, function(success, errorMessage) {
-        if (!success) {
-            setErrorMessage(`Login failed, invalid credentials or server unreachable`);
-            statusDiv.innerHTML = '';
-            return;
-        }
-        loggedIn = true;
 
-        // Status downloads
-        updateStatusDownloads(true);
+    // Status downloads
+    updateStatusDownloads(true);
 
-        // Download current tab's page
-        chrome.tabs.query({active: true, lastFocusedWindow: true}, tabs => {
-            const url = tabs[0].url;
-            const name = tabs[0].title;
-            downloadLabel.innerText = name;
-            checkURL(url, function(success) {
-                if (!success) {
-                    // No plugin found for the current page
+    // Download current tab's page
+    chrome.tabs.query({active: true, lastFocusedWindow: true}, tabs => {
+        const url = tabs[0].url;
+        const name = tabs[0].title;
+        downloadLabel.innerText = name;
+        checkURL(url, function(success) {
+            if (!success) {
+                // No plugin found for the current page
+                return;
+            }
+            getQueueData(function(urls) {
+                pageDownloadDiv.hidden = false;
+                if (urls.includes(url)) {
+                    setErrorMessage(`Download already added`);
                     return;
                 }
-                getQueueData(function(urls) {
-                    pageDownloadDiv.hidden = false;
-                    if (urls.includes(url)) {
-                        setErrorMessage(`Download already added`);
-                        return;
-                    }
-                    downloadDiv.hidden = false;
-                });
+                downloadDiv.hidden = false;
             });
         });
     });
