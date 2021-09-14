@@ -6,8 +6,11 @@ let downloadButton = document.getElementById('download');
 let downloadLabel = document.getElementById('downloadLabel');
 let downloadDiv = document.getElementById('downloadDiv');
 let optionsButton = document.getElementById('optionsButton');
+let limitSpeedButton = document.getElementById('limitSpeedButton');
+let externalLinkButton = document.getElementById('externalLinkButton');
 
 let loggedIn = false;
+let limitSpeedStatus = true;
 
 let serverIp, serverPort;
 chrome.storage.sync.get(['serverIp', 'serverPort'], function(data) {
@@ -98,6 +101,49 @@ function getQueueData(callback) {
     xhr.send();
 }
 
+function getLimitSpeedStatus(callback) {
+    let xhr = new XMLHttpRequest();
+    xhr.open('POST', `https://${serverIp}/api/getConfigValue?category="download"&option="limit_speed"`, true);
+    xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+    xhr.onreadystatechange = function() {
+        if (xhr.readyState === 4) {
+            const limitSpeed = JSON.parse(xhr.responseText).toLowerCase() === 'true';
+            callback(limitSpeed);
+        }
+    }
+    xhr.send();
+}
+
+function setLimitSpeedStatus(limitSpeed, callback) {
+    let xhr = new XMLHttpRequest();
+    xhr.open('POST', `https://${serverIp}/api/setConfigValue?category="download"&option="limit_speed"&value="${limitSpeed}"`, true);
+    xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+    xhr.onreadystatechange = function() {
+        if (xhr.readyState === 4) {
+            console.log(xhr.responseText);
+            const success = JSON.parse(xhr.responseText);
+            callback(success);
+        }
+    }
+    xhr.send();
+}
+
+function updateLimitSpeedStatus() {
+    getLimitSpeedStatus(function(status) {
+        limitSpeedStatus = status;
+        console.log(status);
+        if (limitSpeedStatus) {
+            // Set color to black
+            console.log('black');
+            limitSpeedButton.style.color = "black";
+        } else {
+            // Set color to blue
+            console.log('blue');
+            limitSpeedButton.style.color = "#007bff";
+        }
+    });
+}
+
 function updateStatusDownloads(loop) {
     getStatusDownloads(function (status) {
         let html = '';
@@ -171,10 +217,19 @@ optionsButton.onclick = function(event) {
     chrome.tabs.create({'url': '/options.html'});
 }
 
+limitSpeedButton.onclick = function(event) {
+    limitSpeedStatus = !limitSpeedStatus;
+    setLimitSpeedStatus(limitSpeedStatus, function(success) {
+        updateLimitSpeedStatus();
+    });
+}
 
-chrome.storage.sync.get(['username', 'password', 'loggedIn'], function(data) {
-    const username = data.username;
-    const password = data.password;
+
+chrome.storage.sync.get(['serverIp', 'loggedIn'], function(data) {
+    externalLinkButton.onclick = function(event) {
+        chrome.tabs.create({'url': `https://${serverIp}/home`});
+    }
+
     loggedIn = data.loggedIn;
     if (!loggedIn) {
         setErrorMessage(`No credentials are specified, please set them in the extension's option page`);
@@ -184,6 +239,9 @@ chrome.storage.sync.get(['username', 'password', 'loggedIn'], function(data) {
 
     // Status downloads
     updateStatusDownloads(true);
+
+    // Limit speed status
+    updateLimitSpeedStatus();
 
     // Download current tab's page
     chrome.tabs.query({active: true, lastFocusedWindow: true}, tabs => {
