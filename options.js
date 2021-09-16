@@ -2,6 +2,7 @@ let usernameInput = document.getElementById('username');
 let passwordInput = document.getElementById('password');
 let serverIpInput = document.getElementById('serverIp');
 let serverPortInput = document.getElementById('serverPort');
+let useHTTPSInput = document.getElementById('useHTTPS');
 let spinnerDiv = document.getElementById('spinnerDiv');
 
 let saveButton = document.getElementById('saveButton');
@@ -11,7 +12,8 @@ let alertSuccess = document.getElementById('alertSuccess');
 let alertDanger = document.getElementById('alertDanger');
 
 let loggedIn = false;
-let storedServerIP, storedServerPort;
+let storedServerIP, storedServerPort, storedProtocol;
+let origin;
 
 let loginModal = $('#loginModal');
 loginModal.on('hide.bs.modal', function() {
@@ -62,9 +64,9 @@ function checkLoggedIn() {
     }
 }
 
-function getServerStatus(serverIp, serverPort) {
+function getServerStatus() {
     let xhr = new XMLHttpRequest();
-    xhr.open('POST', `https://${serverIp}/api/statusServer`, true);
+    xhr.open('POST', `${origin}/api/statusServer`, true);
     xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
     xhr.onreadystatechange = function() {
         if (xhr.readyState === 4) {
@@ -75,9 +77,13 @@ function getServerStatus(serverIp, serverPort) {
     xhr.send();
 }
 
-function login(serverIp, serverPort) {
+function getProtocol() {
+    return useHTTPSInput.checked ? 'https' : 'http';
+}
+
+function login() {
     let xhr = new XMLHttpRequest();
-    xhr.open('POST', `https://${serverIp}/api/login`, true);
+    xhr.open('POST', `${origin}/api/login`, true);
     xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
     xhr.onreadystatechange = function() {
         if (xhr.readyState === 4) {
@@ -85,6 +91,7 @@ function login(serverIp, serverPort) {
                 chrome.storage.sync.set({
                     serverIp: serverIpInput.value,
                     serverPort: serverPortInput.value,
+                    protocol: getProtocol(),
                     loggedIn: true
                 }, function () {
                     setSuccessMessage('Server data saved');
@@ -103,16 +110,38 @@ function login(serverIp, serverPort) {
     xhr.send(`username=${username.value}&password=${password.value}`);
 }
 
-function saveServerData(serverIp, serverPort) {
+function saveServerData(serverIp, serverPort, protocol) {
     chrome.storage.sync.set({
         serverIp: serverIp,
         serverPort: serverPort,
+        protocol: protocol,
         loggedIn: false
     }, function () {
         storedServerIP = serverIp;
         storedServerPort = serverPort;
+        storedProtocol = protocol;
         setSuccessMessage('Server data saved');
         checkLoggedIn();
+    });
+}
+
+function requestPermission(serverIp, serverPort, protocol) {
+    chrome.permissions.contains({
+        origins: [`${origin}/`]
+    }, function(result) {
+        if (result) {
+            saveServerData(serverIp, serverPort, protocol);
+        } else {
+            chrome.permissions.request({
+                origins: [`${origin}/`]
+            }, function(granted) {
+                if (granted) {
+                    saveServerData(serverIp, serverPort, protocol);
+                } else {
+                    alert('Not granting this permission will make the extension unusable.');
+                }
+            });
+        }
     });
 }
 
@@ -120,25 +149,9 @@ function saveServerData(serverIp, serverPort) {
 saveButton.onclick = function(ev) {
     const serverIp = serverIpInput.value;
     const serverPort = serverPortInput.value;
-
-    // Checking permissions
-    chrome.permissions.contains({
-        origins: [`https://${serverIp}/`]
-    }, function(result) {
-        if (result) {
-            saveServerData(serverIp, serverPort);
-        } else {
-            chrome.permissions.request({
-                origins: [`https://${serverIp}/`]
-            }, function(granted) {
-                if (granted) {
-                    saveServerData(serverIp, serverPort);
-                } else {
-                    alert('Not granting this permission will make the extension unusable.');
-                }
-            });
-        }
-    });
+    const protocol = getProtocol();
+    origin = `${protocol}://${serverIp}:${serverPort}`
+    requestPermission(serverIp, serverPort, protocol);
 };
 
 loginButton.onclick = function(ev) {
@@ -149,12 +162,16 @@ loginButtonModal.onclick = function(ev) {
     login(serverIpInput.value, null);
 }
 
-chrome.storage.sync.get(['serverIp', 'serverPort', 'loggedIn'], function(data) {
+chrome.storage.sync.get(['serverIp', 'serverPort', 'protocol', 'loggedIn'], function(data) {
+    console.log(data);
     storedServerIP = data.serverIp || '172.0.0.1'
     storedServerPort = data.serverPort || 8001;
+    storedProtocol = data.protocol || 'http';
     serverIpInput.value = storedServerIP;
     serverPortInput.value = storedServerPort;
+    useHTTPSInput.checked = storedProtocol === 'https';
     loggedIn = data.loggedIn;
 
-    getServerStatus(storedServerIP, storedServerPort);
+    origin = `${storedProtocol}://${storedServerIP}:${storedServerPort}`;
+    getServerStatus();
 });

@@ -12,36 +12,12 @@ let totalSpeedDiv = document.getElementById('totalSpeed');
 
 let loggedIn = false;
 let limitSpeedStatus = true;
+let origin;
 
-let serverIp, serverPort;
-chrome.storage.sync.get(['serverIp', 'serverPort'], function(data) {
-    serverIp = data.serverIp;
-    serverPort = data.serverPort;
-});
-
-function login(username, password, callback) {
-    if (!username || !password) {
-        callback(false);
-        return;
-    }
-    let xhr = new XMLHttpRequest();
-    xhr.open('POST', `https://${serverIp}/api/login`, true);
-    xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-    xhr.onreadystatechange = function() {
-        if (xhr.readyState === 4) {
-            callback(JSON.parse(xhr.responseText));
-        }
-    }
-    xhr.timeout = 5000;
-    xhr.ontimeout = function() {
-        callback(false);
-    }
-    xhr.send(`username=${username}&password=${password}`);
-}
 
 function checkURL(url, callback) {
     let xhr = new XMLHttpRequest();
-    xhr.open('POST', `https://${serverIp}/api/checkURLs`, true);
+    xhr.open('POST', `${origin}/api/checkURLs`, true);
     xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
     xhr.onreadystatechange = function() {
         if (xhr.readyState === 4) {
@@ -54,7 +30,7 @@ function checkURL(url, callback) {
 
 function addPackage(name, url, callback) {
     let xhr = new XMLHttpRequest();
-    xhr.open('POST', `https://${serverIp}/api/addPackage`, true);
+    xhr.open('POST', `${origin}/api/addPackage`, true);
     xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
     xhr.onreadystatechange = function() {
         if (xhr.readyState === 4) {
@@ -72,7 +48,7 @@ function addPackage(name, url, callback) {
 
 function getStatusDownloads(callback) {
     let xhr = new XMLHttpRequest();
-    xhr.open('POST', `https://${serverIp}/api/statusDownloads`, true);
+    xhr.open('POST', `${origin}/api/statusDownloads`, true);
     xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
     xhr.onreadystatechange = function() {
         if (xhr.readyState === 4) {
@@ -85,7 +61,7 @@ function getStatusDownloads(callback) {
 
 function getQueueData(callback) {
     let xhr = new XMLHttpRequest();
-    xhr.open('POST', `https://${serverIp}/api/getQueueData`, true);
+    xhr.open('POST', `${origin}/api/getQueueData`, true);
     xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
     xhr.onreadystatechange = function() {
         if (xhr.readyState === 4) {
@@ -104,7 +80,7 @@ function getQueueData(callback) {
 
 function getLimitSpeedStatus(callback) {
     let xhr = new XMLHttpRequest();
-    xhr.open('POST', `https://${serverIp}/api/getConfigValue?category="download"&option="limit_speed"`, true);
+    xhr.open('POST', `${origin}/api/getConfigValue?category="download"&option="limit_speed"`, true);
     xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
     xhr.onreadystatechange = function() {
         if (xhr.readyState === 4) {
@@ -117,7 +93,7 @@ function getLimitSpeedStatus(callback) {
 
 function setLimitSpeedStatus(limitSpeed, callback) {
     let xhr = new XMLHttpRequest();
-    xhr.open('POST', `https://${serverIp}/api/setConfigValue?category="download"&option="limit_speed"&value="${limitSpeed}"`, true);
+    xhr.open('POST', `${origin}/api/setConfigValue?category="download"&option="limit_speed"&value="${limitSpeed}"`, true);
     xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
     xhr.onreadystatechange = function() {
         if (xhr.readyState === 4) {
@@ -132,12 +108,7 @@ function setLimitSpeedStatus(limitSpeed, callback) {
 function updateLimitSpeedStatus() {
     getLimitSpeedStatus(function(status) {
         limitSpeedStatus = status;
-        console.log(status);
-        if (limitSpeedStatus) {
-            limitSpeedButton.style.color = "black";
-        } else {
-            limitSpeedButton.style.color = "#007bff";
-        }
+        limitSpeedButton.style.color = limitSpeedStatus ? "black" : "#007bff";
         limitSpeedButton.disabled = false;
     });
 }
@@ -230,10 +201,14 @@ limitSpeedButton.onclick = function(event) {
     });
 }
 
+chrome.storage.sync.get(['serverIp', 'serverPort', 'protocol', 'loggedIn'], function(data) {
+    const serverIp = data.serverIp;
+    const serverPort = data.serverPort;
+    const protocol = data.protocol;
+    origin = `${protocol}://${serverIp}:${serverPort}`
 
-chrome.storage.sync.get(['serverIp', 'loggedIn'], function(data) {
     externalLinkButton.onclick = function(event) {
-        chrome.tabs.create({'url': `https://${serverIp}/home`});
+        chrome.tabs.create({'url': `${origin}/home`});
     }
 
     loggedIn = data.loggedIn;
