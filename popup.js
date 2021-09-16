@@ -134,14 +134,11 @@ function updateLimitSpeedStatus() {
         limitSpeedStatus = status;
         console.log(status);
         if (limitSpeedStatus) {
-            // Set color to black
-            console.log('black');
             limitSpeedButton.style.color = "black";
         } else {
-            // Set color to blue
-            console.log('blue');
             limitSpeedButton.style.color = "#007bff";
         }
+        limitSpeedButton.disabled = false;
     });
 }
 
@@ -227,6 +224,7 @@ optionsButton.onclick = function(event) {
 
 limitSpeedButton.onclick = function(event) {
     limitSpeedStatus = !limitSpeedStatus;
+    limitSpeedButton.disabled = true;
     setLimitSpeedStatus(limitSpeedStatus, function(success) {
         updateLimitSpeedStatus();
     });
