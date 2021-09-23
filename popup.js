@@ -25,7 +25,7 @@ function checkURL(url, callback) {
             callback(!response.hasOwnProperty('BasePlugin') && !response.hasOwnProperty('error'));
         }
     }
-    xhr.send(`urls=["${url}"]`);
+    xhr.send(`urls=["${encodeURIComponent(url)}"]`);
 }
 
 function addPackage(name, url, callback) {
@@ -43,7 +43,7 @@ function addPackage(name, url, callback) {
         }
     }
     const safeName = name.replace(/[^a-z0-9._\-]/gi, '_');
-    xhr.send(`name="${safeName}"&links=["${url}"]`);
+    xhr.send(`name="${safeName}"&links=["${encodeURIComponent(url)}"]`);
 }
 
 function getStatusDownloads(callback) {
