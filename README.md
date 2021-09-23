@@ -1,21 +1,26 @@
-# PyLoad Assistant - Chrome Extension
+# Yape - Chrome Extension
 
-This is a Chrome extension to monitor and easily add downloads to a [PyLoad](https://github.com/pyload/pyload) server.
+Yape stands for **Yet Another PyLoad Extension**. It's a dead simple Chrome extension for monitoring and easily adding downloads to a [PyLoad](https://github.com/pyload/pyload) server.
 
+Features:
+- One-click download
+- Monitor current downloads
+- Monitor global bandwidth usage & one-click speed limiter
 
 ## Usage
 
-First makes sure that the IP address and the port of the `PyLoad` server are correctly set in the option page, as well as the user credentials.
-These data will only be stored locally using the Chrome storage feature.
+Go to the option page by clicking on the `settings` icon and fill the IP address and the port of the `PyLoad` server. Click `Save` and then `Login` to enter your credentials.
 
-The current downloads are available from anywhere.
+> Note: The credentials are not stored on the browser, only the session cookie.  
+
+The current downloads are always displayed.
 If the current active tab has a downloadable file, an extra panel will be displayed with a button to start the download.
 
 
 ## Screenshots
 
-![Screenshot1](images/screenshot-1.png)
+![Screenshot2](images/popup-1.png)
 
-![Screenshot2](images/screenshot-2.png)
+![Screenshot3](images/popup-2.png)
 
-![Screenshot3](images/screenshot-3.png)
+![Screenshot1](images/fullscreen.png)
