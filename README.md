@@ -6,6 +6,7 @@ Features:
 - One-click download
 - Monitor current downloads
 - Monitor global bandwidth usage & one-click speed limiter
+- Context menu downloads
 
 ## Usage
 
@@ -15,6 +16,7 @@ Go to the option page by clicking on the `settings` icon and fill the IP address
 
 The current downloads are always displayed.
 If the current active tab has a downloadable file, an extra panel will be displayed with a button to start the download.
+A download can also be added by right-clicking on a link and selecting `Download with Yape`.
 
 
 ## Screenshots

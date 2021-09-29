@@ -4,11 +4,15 @@ function getServerStatus(callback) {
     xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
     xhr.onreadystatechange = function() {
         if (xhr.readyState === 4) {
-            const response = JSON.parse(xhr.responseText);
-            if (response.hasOwnProperty('error')) {
-                if (callback) callback(false, response.error);
-            } else {
-                if (callback) callback(true, null, response);
+            try {
+                const response = JSON.parse(xhr.responseText);
+                if (response.hasOwnProperty('error')) {
+                    if (callback) callback(false, response.error);
+                } else {
+                    if (callback) callback(true, null, response);
+                }
+            } catch {
+                if (callback) callback(false, 'Server unreachable');
             }
         }
     }
@@ -25,7 +29,6 @@ function login(username, password, callback) {
     xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
     xhr.onreadystatechange = function() {
         if (xhr.readyState === 4) {
-            console.log(xhr.responseText);
             if (JSON.parse(xhr.responseText) !== false) {
                 if (callback) callback(true);
             } else {
@@ -91,7 +94,6 @@ function setLimitSpeedStatus(limitSpeed, callback) {
     xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
     xhr.onreadystatechange = function() {
         if (xhr.readyState === 4) {
-            console.log(xhr.responseText);
             const success = JSON.parse(xhr.responseText);
             if (callback) callback(success);
         }

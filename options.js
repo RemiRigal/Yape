@@ -46,6 +46,7 @@ function getProtocol() {
 }
 
 function updateLoggedInStatus() {
+    saveButton.disabled = true;
     loginStatusOKDiv.hidden = true;
     loginStatusKODiv.hidden = true;
     loginButton.hidden = true;
@@ -55,6 +56,7 @@ function updateLoggedInStatus() {
         loginStatusOKDiv.hidden = !loggedIn;
         loginStatusKODiv.hidden = loggedIn;
         loginButton.hidden = loggedIn;
+        saveButton.disabled = false;
     });
 }
 

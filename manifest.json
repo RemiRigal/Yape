@@ -1,8 +1,8 @@
 {
   "name": "Yape",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "Extension for PyLoad to easily monitor and add downloads",
-  "permissions": ["activeTab", "storage"],
+  "permissions": ["activeTab", "storage", "contextMenus", "scripting"],
   "host_permissions": ["http://*/", "https://*/"],
   "action": {
     "default_popup": "popup.html",
@@ -20,5 +20,12 @@
     "128": "images/icon.png"
   },
   "options_page": "options.html",
+  "background": {
+    "service_worker": "background.js"
+  },
+  "web_accessible_resources": [{
+    "resources": ["js/lib/toastr.min.js", "js/lib/jquery-3.5.1.min.js", "css/toastr.min.css"],
+    "matches": ["<all_urls>"]
+  }],
   "manifest_version": 3
 }
