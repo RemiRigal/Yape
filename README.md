@@ -2,7 +2,7 @@
 
 [![Chrome Web Store Version](https://img.shields.io/chrome-web-store/v/lbbofcfllogcmffofacfoiolglncdcgb.svg?style=flat-square)](https://chrome.google.com/webstore/detail/yape/lbbofcfllogcmffofacfoiolglncdcgb)
 [![Chrome Web Store Downloads](https://img.shields.io/chrome-web-store/d/lbbofcfllogcmffofacfoiolglncdcgb.svg?style=flat-square)](https://chrome.google.com/webstore/detail/yape/lbbofcfllogcmffofacfoiolglncdcgb/reviews)
-[![Chrome Web Store Rating](https://img.shields.io/chrome-web-store/rating/lbbofcfllogcmffofacfoiolglncdcgb.svg?style=flat-square)](https://chrome.google.com/webstore/detail/yape/lbbofcfllogcmffofacfoiolglncdcgb/reviews)
+[![Chrome Web Store Rating](https://img.shields.io/chrome-web-store/stars/lbbofcfllogcmffofacfoiolglncdcgb.svg?style=flat-square)](https://chrome.google.com/webstore/detail/yape/lbbofcfllogcmffofacfoiolglncdcgb/reviews)
 [![Chrome Web Store Rating Count](https://img.shields.io/chrome-web-store/rating-count/lbbofcfllogcmffofacfoiolglncdcgb.svg?style=flat-square)](https://chrome.google.com/webstore/detail/yape/lbbofcfllogcmffofacfoiolglncdcgb/reviews)
 
 Yape stands for **Yet Another PyLoad Extension**. It's a dead simple Chrome extension for monitoring and easily adding downloads to a [PyLoad](https://github.com/pyload/pyload) server.
