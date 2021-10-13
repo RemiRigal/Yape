@@ -45,7 +45,7 @@ function getProtocol() {
     return useHTTPSInput.checked ? 'https' : 'http';
 }
 
-function updateLoggedInStatus() {
+function updateLoggedInStatus(callback) {
     saveButton.disabled = true;
     loginStatusOKDiv.hidden = true;
     loginStatusKODiv.hidden = true;
@@ -57,6 +57,7 @@ function updateLoggedInStatus() {
         loginStatusKODiv.hidden = loggedIn;
         loginButton.hidden = loggedIn;
         saveButton.disabled = false;
+        if (callback) callback();
     });
 }
 
@@ -79,6 +80,17 @@ function requestPermission(callback) {
             callback(true);
         }
     });
+}
+
+function requireSaving() {
+    if (serverIpInput.value === serverIp && parseInt(serverPortInput.value) === parseInt(serverPort) && useHTTPSInput.checked === (serverProtocol === 'https')) {
+        updateLoggedInStatus();
+    } else {
+        saveButton.disabled = false;
+        loginStatusOKDiv.hidden = true;
+        loginStatusKODiv.hidden = true;
+        loginButton.hidden = true;
+    }
 }
 
 saveButton.onclick = function(ev) {
@@ -109,6 +121,10 @@ pullStoredData(function() {
     serverIpInput.value = serverIp;
     serverPortInput.value = serverPort;
     useHTTPSInput.checked = serverProtocol === 'https';
+
+    serverIpInput.oninput = requireSaving;
+    serverPortInput.oninput = requireSaving;
+    useHTTPSInput.oninput = requireSaving;
 
     updateLoggedInStatus();
 });
