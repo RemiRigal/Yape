@@ -3,6 +3,7 @@
 <head>
   <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
   <link rel="stylesheet" type="text/css" href="css/all.min.css">
+  <link rel="stylesheet" type="text/css" href="css/options.css">
 </head>
 <body>
   <div class="text-center h1 m-5">
@@ -11,8 +12,12 @@
   <div class="d-flex justify-content-center">
     <form>
       <div class="form-group">
-        <label for="serverIp">PyLoad server's IP address</label>
+        <label for="serverIp">PyLoad server's host</label>
+        <i class="fa text-primary fa-info-circle ml-2" data-toggle="tooltip" data-placement="right" data-original-title="The domain name, IP address or hostname of the PyLoad server"></i>
         <input type="text" class="form-control" id="serverIp">
+        <div id="serverIpFeedback" class="invalid-feedback">
+          Please provide a valid host
+        </div>
       </div>
       <div class="form-group">
         <label for="serverPort">PyLoad server's port</label>
@@ -77,6 +82,7 @@
 </body>
 
 <script type="text/javascript" src="js/lib/jquery-3.5.1.min.js"></script>
+<script type="text/javascript" src="js/lib/popper.min.js"></script>
 <script type="text/javascript" src="js/lib/bootstrap.min.js"></script>
 <script type="text/javascript" src="js/pyload-api.js"></script>
 <script type="text/javascript" src="js/storage.js"></script>

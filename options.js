@@ -82,6 +82,19 @@ function requestPermission(callback) {
     });
 }
 
+function validateServerIP() {
+    const value = serverIpInput.value;
+    const isValidIP = /^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/.test(value);
+    const isValidName = /^(?!:\/\/)([a-zA-Z0-9]+\.)?[a-zA-Z0-9][a-zA-Z0-9-]+\.[a-zA-Z]{2,6}?$/i.test(value);
+    const isLocalhost = (value === 'localhost');
+    if (isValidIP || isValidName || isLocalhost) {
+        serverIpInput.classList.remove('is-invalid');
+    } else {
+        serverIpInput.classList.add('is-invalid');
+        saveButton.disabled = true;
+    }
+}
+
 function requireSaving() {
     if (serverIpInput.value === serverIp && parseInt(serverPortInput.value) === parseInt(serverPort) && useHTTPSInput.checked === (serverProtocol === 'https')) {
         updateLoggedInStatus();
@@ -91,6 +104,7 @@ function requireSaving() {
         loginStatusKODiv.hidden = true;
         loginButton.hidden = true;
     }
+    validateServerIP();
 }
 
 saveButton.onclick = function(ev) {
@@ -116,6 +130,10 @@ loginButtonModal.onclick = function(ev) {
         }
     });
 }
+
+$(document).ready(function(){
+    $('[data-toggle="tooltip"]').tooltip();
+});
 
 pullStoredData(function() {
     serverIpInput.value = serverIp;
