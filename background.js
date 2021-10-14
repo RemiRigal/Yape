@@ -1,5 +1,3 @@
-importScripts('js/storage.js');
-
 const notify = function(title, message) {
     return chrome.notifications.create('', {
         type: 'basic',
@@ -10,52 +8,50 @@ const notify = function(title, message) {
 }
 
 const loadToastr = function(tab, callback) {
-    chrome.scripting.insertCSS({
-        target: {tabId: tab.id},
-        files: ['css/toastr.min.css']
+    browser.tabs.insertCSS(tab.id, {
+        file: 'css/toastr.min.css'
     }, function() {
-        chrome.scripting.executeScript({
-            target: {tabId: tab.id},
-            files: ['js/lib/jquery-3.5.1.min.js', 'js/lib/toastr.min.js']
+        browser.tabs.executeScript(tab.id, {
+            file: 'js/lib/jquery-3.5.1.min.js'
         }, function() {
-            chrome.scripting.executeScript({
-                target: {tabId: tab.id},
-                func: () => {
-                    toastr.options = {
-                        closeButton: false,
-                        newestOnTop: false,
-                        progressBar: false,
-                        positionClass: 'toastr-top-right',
-                        containerId: 'toastr-container',
-                        toastClass: 'toastr',
-                        iconClasses: {
-                            error: 'toastr-error',
-                            info: 'toastr-info',
-                            success: 'toastr-success',
-                            warning: 'toastr-warning'
-                        },
-                        iconClass: 'toastr-info',
-                        titleClass: 'toastr-title',
-                        messageClass: 'toastr-message',
-                        closeClass: 'toastr-close-button',
-                        timeOut: 8000
-                    };
-                }
+            browser.tabs.executeScript(tab.id, {
+                file: 'js/lib/toastr.min.js'
             }, function() {
-                callback();
+                browser.tabs.executeScript(tab.id, {
+                    code:
+                        `toastr.options = {
+                            closeButton: false,
+                            newestOnTop: false,
+                            progressBar: false,
+                            positionClass: 'toastr-top-right',
+                            containerId: 'toastr-container',
+                            toastClass: 'toastr',
+                            iconClasses: {
+                                error: 'toastr-error',
+                                info: 'toastr-info',
+                                success: 'toastr-success',
+                                warning: 'toastr-warning'
+                            },
+                            iconClass: 'toastr-info',
+                            titleClass: 'toastr-title',
+                            messageClass: 'toastr-message',
+                            closeClass: 'toastr-close-button',
+                            timeOut: 8000
+                        };
+                        undefined;`
+                }, function() {
+                    callback();
+                });
             });
         });
     });
 }
 
 const sendToast = function(tab, type, message) {
-    chrome.scripting.executeScript({
-        target: {tabId: tab.id},
-        func: (type, message) => {
-            toastr.remove();
-            toastr[type](message);
-        },
-        args: [type, message]
+    browser.tabs.executeScript(tab.id, {
+        code: `toastr.remove();
+               toastr['${type}']('${message}');
+               undefined;`
     });
 }
 

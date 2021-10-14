@@ -2,9 +2,9 @@
   "name": "Yape",
   "version": "1.0.0",
   "description": "Extension for PyLoad to easily monitor and add downloads",
-  "permissions": ["activeTab", "storage", "contextMenus", "scripting"],
-  "host_permissions": ["http://*/", "https://*/"],
-  "action": {
+  "permissions": ["activeTab", "storage", "contextMenus"],
+  "optional_permissions": ["http://*/", "https://*/"],
+  "browser_action": {
     "default_popup": "popup.html",
     "default_icon": {
       "16": "images/icon.png",
@@ -19,13 +19,20 @@
     "48": "images/icon.png",
     "128": "images/icon.png"
   },
-  "options_page": "options.html",
-  "background": {
-    "service_worker": "background.js"
+  "options_ui": {
+    "page": "options.html",
+    "open_in_tab": true
   },
-  "web_accessible_resources": [{
-    "resources": ["js/lib/toastr.min.js", "js/lib/jquery-3.5.1.min.js", "css/toastr.min.css"],
-    "matches": ["<all_urls>"]
-  }],
-  "manifest_version": 3
+  "background": {
+    "scripts": ["js/storage.js", "background.js"],
+    "persistent": true
+  },
+  "web_accessible_resources": ["js/lib/toastr.min.js", "js/lib/jquery-3.5.1.min.js", "css/toastr.min.css"],
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "remi.rigal@ensta-bretagne.org",
+      "strict_min_version": "42.0"
+    }
+  },
+  "manifest_version": 2
 }
