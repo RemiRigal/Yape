@@ -31,13 +31,9 @@ If the current active tab has a downloadable file, an extra panel will be displa
 A download can also be added by right-clicking on a link and selecting `Download with Yape`.
 
 
-## Screenshots
+## Screenshot
 
-![Screenshot2](images/popup-1.png)
-
-![Screenshot3](images/popup-2.png)
-
-![Screenshot1](images/fullscreen.png)
+![Screenshot](images/screenshot.jpg)
 
 
 ## License
