@@ -1,9 +1,8 @@
 {
   "name": "Yape",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Extension for PyLoad to easily monitor and add downloads",
-  "permissions": ["activeTab", "storage", "contextMenus"],
-  "optional_permissions": ["http://*/", "https://*/"],
+  "permissions": ["activeTab", "storage", "contextMenus", "http://*/", "https://*/"],
   "browser_action": {
     "default_popup": "popup.html",
     "default_icon": {
@@ -31,7 +30,7 @@
   "browser_specific_settings": {
     "gecko": {
       "id": "remi.rigal@ensta-bretagne.org",
-      "strict_min_version": "42.0"
+      "strict_min_version": "57.0"
     }
   },
   "manifest_version": 2
