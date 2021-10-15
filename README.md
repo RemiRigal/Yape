@@ -1,11 +1,16 @@
-# Yape - Chrome Extension
+# Yape - Browser extension for PyLoad
 
 [![Chrome Web Store Version](https://img.shields.io/chrome-web-store/v/lbbofcfllogcmffofacfoiolglncdcgb.svg?style=flat-square)](https://chrome.google.com/webstore/detail/yape/lbbofcfllogcmffofacfoiolglncdcgb)
 [![Chrome Web Store Downloads](https://img.shields.io/chrome-web-store/d/lbbofcfllogcmffofacfoiolglncdcgb.svg?style=flat-square)](https://chrome.google.com/webstore/detail/yape/lbbofcfllogcmffofacfoiolglncdcgb/reviews)
 [![Chrome Web Store Rating](https://img.shields.io/chrome-web-store/stars/lbbofcfllogcmffofacfoiolglncdcgb.svg?style=flat-square)](https://chrome.google.com/webstore/detail/yape/lbbofcfllogcmffofacfoiolglncdcgb/reviews)
-[![Chrome Web Store Rating Count](https://img.shields.io/chrome-web-store/rating-count/lbbofcfllogcmffofacfoiolglncdcgb.svg?style=flat-square)](https://chrome.google.com/webstore/detail/yape/lbbofcfllogcmffofacfoiolglncdcgb/reviews)
 
-Yape stands for **Yet Another PyLoad Extension**. It's a dead simple Chrome extension for monitoring and easily adding downloads to a [PyLoad](https://github.com/pyload/pyload) server.
+[![Firefox Web Store Version](https://img.shields.io/amo/v/remi.rigal@ensta-bretagne.org.svg?style=flat-square&label=firefox%20add-on)](https://addons.mozilla.org/fr/firefox/addon/yape/)
+[![Firefox Web Store Downloads](https://img.shields.io/amo/users/remi.rigal@ensta-bretagne.org.svg?style=flat-square)](https://addons.mozilla.org/fr/firefox/addon/yape/)
+[![Firefox Web Store Rating](https://img.shields.io/amo/stars/remi.rigal@ensta-bretagne.org.svg?style=flat-square&label=ratings)](https://addons.mozilla.org/fr/firefox/addon/yape/)
+
+
+
+Yape stands for **Yet Another PyLoad Extension**. It's a dead simple browser extension for monitoring and easily adding downloads to a [PyLoad](https://github.com/pyload/pyload) server.
 
 Features:
 - One-click download
@@ -17,7 +22,7 @@ Features:
 ## Install
 
 **[Available on the Chrome Web Store](https://chrome.google.com/webstore/detail/yape/lbbofcfllogcmffofacfoiolglncdcgb)**  
-Firefox version will come soon !
+**[Available on Firefox Add-ons](https://addons.mozilla.org/fr/firefox/addon/yape/)**
 
 
 ## Usage
