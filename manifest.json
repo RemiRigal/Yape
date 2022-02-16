@@ -1,23 +1,23 @@
 {
   "name": "Yape",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Extension for PyLoad to easily monitor and add downloads",
   "permissions": ["activeTab", "storage", "contextMenus", "scripting"],
   "host_permissions": ["http://*/", "https://*/"],
   "action": {
     "default_popup": "popup.html",
     "default_icon": {
-      "16": "images/icon.png",
-      "32": "images/icon.png",
-      "48": "images/icon.png",
-      "128": "images/icon.png"
+      "16": "images/icon_16.png",
+      "32": "images/icon_32.png",
+      "48": "images/icon_48.png",
+      "128": "images/icon_128.png"
     }
   },
   "icons": {
-    "16": "images/icon.png",
-    "32": "images/icon.png",
-    "48": "images/icon.png",
-    "128": "images/icon.png"
+    "16": "images/icon_16.png",
+    "32": "images/icon_32.png",
+    "48": "images/icon_48.png",
+    "128": "images/icon_128.png"
   },
   "options_page": "options.html",
   "background": {
