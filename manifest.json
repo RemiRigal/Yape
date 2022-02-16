@@ -1,6 +1,6 @@
 {
   "name": "Yape",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Extension for PyLoad to easily monitor and add downloads",
   "permissions": ["activeTab", "storage", "contextMenus", "scripting"],
   "host_permissions": ["http://*/", "https://*/"],
