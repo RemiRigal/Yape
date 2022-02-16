@@ -54,9 +54,9 @@ function updateStatusDownloads(loop) {
               </div>
             `;
         }
-        statusDiv.innerHTML = html;
+        statusDiv.innerHTML = DOMPurify.sanitize(html);
         if (totalSpeed > 0) {
-            totalSpeedDiv.innerHTML = `- ${(totalSpeed / (1000 * 1000)).toFixed(2)} MB/s`;
+            totalSpeedDiv.innerHTML = DOMPurify.sanitize(`- ${(totalSpeed / (1000 * 1000)).toFixed(2)} MB/s`);
         } else {
             totalSpeedDiv.innerHTML = '';
         }
