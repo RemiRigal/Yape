@@ -85,7 +85,7 @@ function requestPermission(callback) {
 function validateServerIP() {
     const value = serverIpInput.value;
     const isValidIP = /^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/.test(value);
-    const isValidName = /^(?!:\/\/)([a-zA-Z0-9]+\.)?[a-zA-Z0-9][a-zA-Z0-9-]+\.[a-zA-Z]{2,6}?$/i.test(value);
+    const isValidName = /^[a-z\d]([a-z\d\-]{0,61}[a-z\d])?(\.[a-z\d]([a-z\d\-]{0,61}[a-z\d])?)*$/i.test(value);
     const isLocalhost = (value === 'localhost');
     if (isValidIP || isValidName || isLocalhost) {
         serverIpInput.classList.remove('is-invalid');
