@@ -2,10 +2,12 @@ let usernameInput = document.getElementById('username');
 let passwordInput = document.getElementById('password');
 let serverIpInput = document.getElementById('serverIp');
 let serverPortInput = document.getElementById('serverPort');
+let serverPathInput = document.getElementById('serverPath');
 let useHTTPSInput = document.getElementById('useHTTPS');
 let spinnerDiv = document.getElementById('spinnerDiv');
 let loginStatusOKDiv = document.getElementById('loginStatusOK');
 let loginStatusKODiv = document.getElementById('loginStatusKO');
+let currentURL = document.getElementById('currentURL');
 
 let saveButton = document.getElementById('saveButton');
 let loginButton = document.getElementById('loginButton');
@@ -82,21 +84,42 @@ function requestPermission(callback) {
     });
 }
 
-function validateServerIP() {
+function validHost(str) {
+    let pattern = new RegExp('^((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|'+ // domain name
+        '((\\d{1,3}\\.){3}\\d{1,3}))$'); // OR ip (v4) address
+    return !!pattern.test(str);
+}
+
+function validateForm() {
+    // Host
     const value = serverIpInput.value;
-    const isValidIP = /^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/.test(value);
-    const isValidName = /^(?!:\/\/)([a-zA-Z0-9]+\.)?[a-zA-Z0-9][a-zA-Z0-9-]+\.[a-zA-Z]{2,6}?$/i.test(value);
     const isLocalhost = (value === 'localhost');
-    if (isValidIP || isValidName || isLocalhost) {
+    const isServerIPValid = validHost(value) || isLocalhost;
+    if (isServerIPValid) {
         serverIpInput.classList.remove('is-invalid');
     } else {
         serverIpInput.classList.add('is-invalid');
         saveButton.disabled = true;
     }
+    // Path
+    const isValidPath = /^((\/[.\w-]+)*\/{0,1}|\/)$/.test(serverPathInput.value);
+    if (isValidPath) {
+        serverPathInput.classList.remove('is-invalid');
+    } else {
+        serverPathInput.classList.add('is-invalid');
+        saveButton.disabled = true;
+    }
 }
 
 function requireSaving() {
-    if (serverIpInput.value === serverIp && parseInt(serverPortInput.value) === parseInt(serverPort) && useHTTPSInput.checked === (serverProtocol === 'https')) {
+    updateCurrentURL();
+    if (xhr !== null) {
+        xhr.abort();
+    }
+    if (serverIpInput.value === serverIp &&
+        parseInt(serverPortInput.value) === parseInt(serverPort) &&
+        useHTTPSInput.checked === (serverProtocol === 'https') &&
+        serverPathInput.value === serverPath) {
         updateLoggedInStatus();
     } else {
         saveButton.disabled = false;
@@ -104,11 +127,19 @@ function requireSaving() {
         loginStatusKODiv.hidden = true;
         loginButton.hidden = true;
     }
-    validateServerIP();
+    validateForm();
+}
+
+function updateCurrentURL() {
+    portString = `:${serverPortInput.value}`;
+    if ((useHTTPSInput.checked && serverPortInput.value === '443') || (!useHTTPSInput.checked && serverPortInput.value === '80')) {
+        portString = '';
+    }
+    currentURL.innerHTML = `${useHTTPSInput.checked ? 'https' : 'http'}://${serverIpInput.value}${portString}${serverPathInput.value}`;
 }
 
 saveButton.onclick = function(ev) {
-    setOrigin(serverIpInput.value, serverPortInput.value, getProtocol(), function() {
+    setOrigin(serverIpInput.value, serverPortInput.value, getProtocol(), serverPathInput.value, function() {
         requestPermission(function(granted) {
             updateLoggedInStatus();
         });
@@ -138,11 +169,15 @@ $(document).ready(function(){
 pullStoredData(function() {
     serverIpInput.value = serverIp;
     serverPortInput.value = serverPort;
+    serverPathInput.value = serverPath;
     useHTTPSInput.checked = serverProtocol === 'https';
+
+    updateCurrentURL();
 
     serverIpInput.oninput = requireSaving;
     serverPortInput.oninput = requireSaving;
     useHTTPSInput.oninput = requireSaving;
+    serverPathInput.oninput = requireSaving;
 
     updateLoggedInStatus();
 });

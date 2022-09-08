@@ -1,12 +1,16 @@
-let serverPort, serverIp, serverProtocol, origin;
+let serverPort, serverIp, serverProtocol, serverPath, origin;
 
 
 function pullStoredData(callback) {
     chrome.storage.sync.get(['serverIp', 'serverPort', 'serverProtocol'], function(data) {
         serverIp = data.serverIp || '172.0.0.1';
         serverPort = data.serverPort || 8001;
+        serverPath = data.serverPath || '/';
         serverProtocol = data.serverProtocol || 'http';
-        origin = `${serverProtocol}://${serverIp}:${serverPort}`;
+        origin = `${serverProtocol}://${serverIp}:${serverPort}${serverPath}`;
+        if (origin.endsWith('/')) {
+            origin = origin.slice(0, origin.length - 1);
+        }
         if (callback) callback(data);
     });
 }
@@ -20,15 +24,20 @@ function isLoggedIn(callback) {
     });
 }
 
-function setOrigin(ip, port, protocol, callback) {
+function setOrigin(ip, port, protocol, path, callback) {
     serverIp = ip;
     serverPort = port;
     serverProtocol = protocol;
-    origin = `${serverProtocol}://${serverIp}:${serverPort}`;
+    serverPath = path;
+    origin = `${serverProtocol}://${serverIp}:${serverPort}${serverPath}`;
+    if (origin.endsWith('/')) {
+        origin = origin.slice(0, origin.length - 1);
+    }
     chrome.storage.sync.set({
         serverIp: serverIp,
         serverPort: serverPort,
-        serverProtocol: serverProtocol
+        serverProtocol: serverProtocol,
+        serverPath: serverPath
     }, function () {
         if (callback) callback();
     });

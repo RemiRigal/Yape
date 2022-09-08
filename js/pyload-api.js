@@ -1,5 +1,7 @@
+let xhr = null;
+
 function getServerStatus(callback) {
-    let xhr = new XMLHttpRequest();
+    xhr = new XMLHttpRequest();
     xhr.open('POST', `${origin}/api/statusServer`, true);
     xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
     xhr.onreadystatechange = function() {
