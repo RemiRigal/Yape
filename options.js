@@ -53,11 +53,17 @@ function updateLoggedInStatus(callback) {
     loginStatusKODiv.hidden = true;
     loginButton.hidden = true;
     enableSpinner();
-    isLoggedIn(function(loggedIn) {
+    isLoggedIn(function(loggedIn, unauthorized, error) {
         disableSpinner();
         loginStatusOKDiv.hidden = !loggedIn;
         loginStatusKODiv.hidden = loggedIn;
-        loginButton.hidden = loggedIn;
+        loginStatusKODiv.innerHTML = `<i class="fa fa-times small mr-3"></i>`
+        if (!loggedIn && unauthorized) {
+            loginStatusKODiv.innerHTML += `Please log in`;
+        } else {
+            loginStatusKODiv.innerHTML += error ? error : `You are not logged in`;
+        }
+        loginButton.hidden = !unauthorized;
         saveButton.disabled = false;
         if (callback) callback();
     });
@@ -99,6 +105,14 @@ function validateForm() {
         serverIpInput.classList.remove('is-invalid');
     } else {
         serverIpInput.classList.add('is-invalid');
+        saveButton.disabled = true;
+    }
+    // Port
+    const isValidPort = /\d+/.test(serverPortInput.value);
+    if (isValidPort) {
+        serverPortInput.classList.remove('is-invalid');
+    } else {
+        serverPortInput.classList.add('is-invalid');
         saveButton.disabled = true;
     }
     // Path

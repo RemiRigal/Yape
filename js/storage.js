@@ -16,10 +16,9 @@ function pullStoredData(callback) {
 }
 
 function isLoggedIn(callback) {
-    getServerStatus(function(success) {
+    getServerStatus(function(success, unauthorized, error, response) {
         if (callback) {
-            if (success) callback(true);
-            else callback(false);
+            callback(success, unauthorized, error, response);
         }
     });
 }
