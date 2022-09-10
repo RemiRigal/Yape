@@ -23,13 +23,15 @@
       </div>
       <div class="form-group">
         <label for="serverPort">PyLoad server's port</label>
+        <i class="fa text-primary fa-info-circle ml-2" data-toggle="tooltip" data-placement="right" data-original-title="Default ports are 80 for HTTP and 443 HTTPS"></i>
         <input type="number" class="form-control" id="serverPort">
+        <div id="serverPortFeedback" class="invalid-feedback">
+          Please provide a valid port
+        </div>
       </div>
       <div class="form-group">
-        <div class="flex m-0 row">
-          <label for="serverPath">PyLoad server's path</label>
-          <i class="fa text-primary fa-info-circle ml-2" data-toggle="tooltip" data-placement="right" data-original-title="The path of the PyLoad server"></i>
-        </div>
+        <label for="serverPath">PyLoad server's path</label>
+        <i class="fa text-primary fa-info-circle ml-2" data-toggle="tooltip" data-placement="right" data-original-title="The path of the PyLoad server"></i>
         <input type="text" class="form-control" id="serverPath">
         <div id="serverPathFeedback" class="invalid-feedback">
           Please provide a valid path
@@ -37,7 +39,7 @@
       </div>
       <div class="form-check flex items-center">
         <input type="checkbox" class="form-check-input" id="useHTTPS">
-        <label class="form-check-label ml-3 mt-1" for="useHTTPS">Use HTTPS</label>
+        <label class="form-check-label ml-3" for="useHTTPS">Use HTTPS</label>
       </div>
       <div class="form-group flex items-center justify-content-center mt-4">
         <label class="h5">Your PyLoad URL:</label>

@@ -7,20 +7,28 @@ function getServerStatus(callback) {
     xhr.onreadystatechange = function() {
         if (xhr.readyState === 4) {
             try {
+                if (xhr.status === 404) {
+                    if (callback) callback(false, false, 'Server not found');
+                    return;
+                }
                 const response = JSON.parse(xhr.responseText);
-                if (response.hasOwnProperty('error')) {
-                    if (callback) callback(false, response.error);
-                } else {
-                    if (callback) callback(true, null, response);
+                if (xhr.status === 200) {
+                    if (callback) callback(true, false, null, response);
+                } else if (xhr.status === 403) {
+                    if (callback) callback(false, true, 'Unauthorized', response);
+                } else if (response.hasOwnProperty('error')) {
+                    if (callback) callback(false, false, response.error);
+                } else {  
+                    if (callback) callback(false, false, null, response);
                 }
             } catch {
-                if (callback) callback(false, 'Server unreachable');
+                if (callback) callback(false, false, 'Server unreachable');
             }
         }
     }
     xhr.timeout = 5000;
     xhr.ontimeout = function() {
-        if (callback) callback(false, 'Server unreachable');
+        if (callback) callback(false, false, 'Server unreachable');
     }
     xhr.send();
 }
