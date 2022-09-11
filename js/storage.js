@@ -2,7 +2,7 @@ let serverPort, serverIp, serverProtocol, serverPath, origin;
 
 
 function pullStoredData(callback) {
-    chrome.storage.sync.get(['serverIp', 'serverPort', 'serverProtocol'], function(data) {
+    chrome.storage.sync.get(['serverIp', 'serverPort', 'serverPath', 'serverProtocol'], function(data) {
         serverIp = data.serverIp || '172.0.0.1';
         serverPort = data.serverPort || 8001;
         serverPath = data.serverPath || '/';
